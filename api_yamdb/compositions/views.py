@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 
-from .models Reviews, Comments, Works,
+from .models Reviews, Comments, Title,
 
 from .permissions import (IsAuthorOrModeratorOrAdminOrReadOnly, )
 from .serializers import (ReviewsSerializer, CommentsSerializer, )
@@ -12,14 +12,14 @@ class ReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewsSerializer
     permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly, )
 
-    def get_works(self):
-        return get_object_or_404(Works, id=self.kwargs.get('works_id'))
+    def get_title(self):
+        return get_object_or_404(Title, id=self.kwargs.get('title_id'))
 
     def get_queryset(self):
-        return self.get_works().reviews.all()
+        return self.get_title().reviews.all()
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user, works=self.get_title())
+        serializer.save(author=self.request.user, title=self.get_title())
     
 
 

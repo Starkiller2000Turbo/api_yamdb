@@ -4,8 +4,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Reviews(models.Model):
     """Отзыв на произведение + рейтинг"""
-    works = models.ForeignKey(Works, on_delete=models.CASCADE,
-                              verbose_name='works', related_name='reviews')
+    works = models.ForeignKey(Title, on_delete=models.CASCADE,
+                              verbose_name='title', related_name='reviews')
     text = models.CharField(max_length=1000)
     autor = models.ForeignKey(User, on_delete=models.CASCADE,
                               verbose_name='autor', related_name='reviews')
