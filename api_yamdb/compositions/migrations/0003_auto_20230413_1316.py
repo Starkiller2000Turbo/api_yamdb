@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('compositions', '0002_rename_categorie_title_category'),
     ]
@@ -17,6 +16,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='title',
             name='genre',
-            field=models.ManyToManyField(related_name='titles', to='compositions.Genre'),
+            field=models.ManyToManyField(
+                related_name='titles',
+                to='compositions.Genre',
+            ),
         ),
     ]

@@ -29,11 +29,15 @@ class TitleViewSet(viewsets.ModelViewSet):
         Args:
             serializer: сериализатор, содержащий информацию о посте.
         """
-        if (not Genre.objects.filter(
-            slug=self.request.data.get('genre', None),
-        )) or (not Category.objects.filter(
-            slug=self.request.data.get('category', None),
-        )):
+        if (
+            not Genre.objects.filter(
+                slug=self.request.data.get('genre', None),
+            )
+        ) or (
+            not Category.objects.filter(
+                slug=self.request.data.get('category', None),
+            )
+        ):
             raise SuspiciousOperation()
         genre = Genre.objects.get(
             slug=self.request.data.get('genre', None),
