@@ -4,9 +4,9 @@ from compositions.models import Category, Genre, Title
 
 
 class TitleSerializer(serializers.ModelSerializer):
-    genre = serializers.SlugRelatedField(
+    genre = serializers.ListField(child=serializers.SlugRelatedField(
         slug_field='slug', queryset=Genre.objects.all(),
-    )
+    ), allow_empty=False)
     category = serializers.SlugRelatedField(
         slug_field='slug',  queryset=Category.objects.all(),
     )
