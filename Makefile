@@ -42,10 +42,22 @@ import_genres:
 import_titles:
 	$(MANAGE) import_titles
 
+import users:
+	$(MANAGE) import_users
+
+import comments:
+	$(MANAGE) import_comments
+
+import reviews:
+	$(MANAGE) import_reviews
+
 import:
 	$(MANAGE) import_categories
 	$(MANAGE) import_genres
 	$(MANAGE) import_titles
+	$(MANAGE) import_users
+	$(MANAGE) import_comments
+	$(MANAGE) import_reviews
 
 clear:
 	$(MANAGE) flush
