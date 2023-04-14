@@ -46,3 +46,6 @@ import:
 	$(MANAGE) import_categories
 	$(MANAGE) import_genres
 	$(MANAGE) import_titles
+
+clear:
+	$(MANAGE) flush
