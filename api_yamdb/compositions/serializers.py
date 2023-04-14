@@ -22,7 +22,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class GenreListingField(serializers.RelatedField):
-
     def to_representation(self, value):
         return value.slug
 
