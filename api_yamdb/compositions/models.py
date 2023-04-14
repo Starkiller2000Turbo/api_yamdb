@@ -47,11 +47,13 @@ class Title(models.Model):
     genre = models.ManyToManyField(
         Genre,
         related_name='titles',
+        null=False,
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
         related_name='titles',
+        null=False,
     )
 
     def __str__(self) -> str:
