@@ -35,3 +35,10 @@ shell:
 
 import_categories:
 	$(MANAGE) import_categories
+
+import_genres:
+	$(MANAGE) import_genres
+
+import:
+	$(MANAGE) import_categories
+	$(MANAGE) import_genres

@@ -13,6 +13,7 @@ class Command(BaseCommand):
         with open(
             f'{settings.DATA_IMPORT_LOCATION}/genre.csv',
             'r',
+            encoding='utf-8-sig',
         ) as csv_file:
             csv_file = csv.reader(csv_file)
             next(csv_file)
