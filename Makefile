@@ -32,6 +32,3 @@ test:
 
 shell:
 	$(MANAGE) shell
-
-app:
-	$(MANAGE) startapp $(name) ./api_yamdb/$(name)
