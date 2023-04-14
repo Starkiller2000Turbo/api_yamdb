@@ -24,7 +24,7 @@ class Command(BaseCommand):
             next(csv_file)
             next(genre_file)
             genre_file = list(genre_file)
-            genre_line = 1
+            genre_line = 0
 
             for counter, line in enumerate(csv_file):
                 name = line[1]
@@ -40,11 +40,13 @@ class Command(BaseCommand):
                     obj.name = name
                     obj.year = year
                     obj.category = category
+                    obj.genre = genre_file[genre_line][2]
+                    genre_line += 1
                     obj.save()
                     for counter1, line1 in enumerate(
-                        genre_file[genre_line - 1:],  # fmt: skip
+                        genre_file[genre_line:],  # fmt: skip
                     ):
-                        if int(line1[1]) > counter:
+                        if int(line1[1]) > counter + 1:
                             break
                         obj.genre.add(Genre.objects.get(id=line1[2]))
                         genre_line += 1
