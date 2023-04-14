@@ -6,7 +6,6 @@ from compositions.models import Category, Genre, Title
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
-            'id',
             'name',
             'slug',
         )
@@ -16,7 +15,6 @@ class GenreSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
-            'id',
             'name',
             'slug',
         )
