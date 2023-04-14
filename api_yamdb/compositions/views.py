@@ -20,7 +20,6 @@ class TitleViewSet(viewsets.ModelViewSet):
     serializer_class = TitleSerializer
     permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
-    pagination_class = None
     filterset_fields = ('genre__slug', 'name', 'year', 'category__slug')
 
     def perform_create(self, serializer: TitleSerializer) -> None:
@@ -59,7 +58,6 @@ class GenreList(generics.ListCreateAPIView):
     permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    pagination_class = None
 
 
 class GenreDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -82,7 +80,6 @@ class CategoryList(generics.ListCreateAPIView):
     permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    pagination_class = None
 
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):

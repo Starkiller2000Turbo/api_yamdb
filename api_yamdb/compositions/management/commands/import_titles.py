@@ -23,6 +23,7 @@ class Command(BaseCommand):
             genre_file = csv.reader(genre_file)
             next(csv_file)
             next(genre_file)
+            genre_file = list(genre_file)
             genre_line = 1
 
             for counter, line in enumerate(csv_file):
@@ -39,15 +40,14 @@ class Command(BaseCommand):
                     obj.name = name
                     obj.year = year
                     obj.category = category
-                    obj.genre = []
+                    obj.save()
                     for counter1, line1 in enumerate(
                         genre_file[genre_line - 1:],  # fmt: skip
                     ):
-                        if line1[1] > counter:
+                        if int(line1[1]) > counter:
                             break
-                        obj.genre.append(Genre.objects.get(id=line[2]))
+                        obj.genre.add(Genre.objects.get(id=line1[2]))
                         genre_line += 1
-                    obj.save()
                     print(obj)
 
             print(f'Import complete, imported {counter} products')

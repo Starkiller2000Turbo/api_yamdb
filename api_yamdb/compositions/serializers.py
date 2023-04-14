@@ -3,31 +3,6 @@ from rest_framework import serializers
 from compositions.models import Category, Genre, Title
 
 
-class TitleSerializer(serializers.ModelSerializer):
-    genre = serializers.ListField(
-        child=serializers.SlugRelatedField(
-            slug_field='slug',
-            queryset=Genre.objects.all(),
-        ),
-        allow_empty=False,
-    )
-    category = serializers.SlugRelatedField(
-        slug_field='slug',
-        queryset=Category.objects.all(),
-    )
-
-    class Meta:
-        fields = (
-            'id',
-            'name',
-            'year',
-            'description',
-            'genre',
-            'category',
-        )
-        model = Title
-
-
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
@@ -46,3 +21,22 @@ class CategorySerializer(serializers.ModelSerializer):
             'slug',
         )
         model = Category
+
+
+class TitleSerializer(serializers.ModelSerializer):
+    genre = GenreSerializer(many=True)
+    category = serializers.SlugRelatedField(
+        slug_field='slug',
+        queryset=Category.objects.all(),
+    )
+
+    class Meta:
+        fields = (
+            'id',
+            'name',
+            'year',
+            'description',
+            'genre',
+            'category',
+        )
+        model = Title
