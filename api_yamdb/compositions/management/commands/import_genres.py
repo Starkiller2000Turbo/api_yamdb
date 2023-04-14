@@ -3,7 +3,7 @@ import csv
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from compositions.models import Category
+from compositions.models import Genre
 
 
 class Command(BaseCommand):
@@ -11,7 +11,7 @@ class Command(BaseCommand):
         print('Importing data from:', settings.DATA_IMPORT_LOCATION)
 
         with open(
-            f'{settings.DATA_IMPORT_LOCATION}/category.csv',
+            f'{settings.DATA_IMPORT_LOCATION}/genre.csv',
             'r',
         ) as csv_file:
             csv_file = csv.reader(csv_file)
@@ -21,9 +21,9 @@ class Command(BaseCommand):
                 name = line[1]
                 slug = line[2]
 
-                if Category.objects.filter(slug=slug).exists():
-                    slug_id = Category.objects.only('id').get(slug=slug).id
-                    p = Category(id=slug_id)
+                if Genre.objects.filter(slug=slug).exists():
+                    slug_id = Genre.objects.only('id').get(slug=slug).id
+                    p = Genre(id=slug_id)
                     p.name = name
                     p.save(
                         update_fields=[
@@ -33,7 +33,7 @@ class Command(BaseCommand):
                     print(p)
 
                 else:
-                    p = Category()
+                    p = Genre()
                     p.name = name
                     p.slug = slug
                     p.save()
