@@ -40,8 +40,6 @@ class Command(BaseCommand):
                     obj.name = name
                     obj.year = year
                     obj.category = category
-                    obj.genre.set(genre_file[genre_line][2])
-                    genre_line += 1
                     obj.save()
                     for counter1, line1 in enumerate(
                         genre_file[genre_line:],  # fmt: skip
