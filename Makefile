@@ -32,3 +32,6 @@ test:
 
 shell:
 	$(MANAGE) shell
+
+import_categories:
+	$(MANAGE) import_categories
