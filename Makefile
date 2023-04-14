@@ -32,3 +32,17 @@ test:
 
 shell:
 	$(MANAGE) shell
+
+import_categories:
+	$(MANAGE) import_categories
+
+import_genres:
+	$(MANAGE) import_genres
+
+import_titles:
+	$(MANAGE) import_titles
+
+import:
+	$(MANAGE) import_categories
+	$(MANAGE) import_genres
+	$(MANAGE) import_titles
