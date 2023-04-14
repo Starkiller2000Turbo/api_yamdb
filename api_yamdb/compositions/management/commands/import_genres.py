@@ -24,20 +24,20 @@ class Command(BaseCommand):
 
                 if Genre.objects.filter(slug=slug).exists():
                     slug_id = Genre.objects.only('id').get(slug=slug).id
-                    p = Genre(id=slug_id)
-                    p.name = name
-                    p.save(
+                    obj = Genre(id=slug_id)
+                    obj.name = name
+                    obj.save(
                         update_fields=[
                             'name',
                         ],
                     )
-                    print(p)
+                    print(obj)
 
                 else:
-                    p = Genre()
-                    p.name = name
-                    p.slug = slug
-                    p.save()
-                    print(p)
+                    obj = Genre()
+                    obj.name = name
+                    obj.slug = slug
+                    obj.save()
+                    print(obj)
 
             print(f'Import complete, imported {counter} products')

@@ -24,20 +24,20 @@ class Command(BaseCommand):
 
                 if Category.objects.filter(slug=slug).exists():
                     slug_id = Category.objects.only('id').get(slug=slug).id
-                    p = Category(id=slug_id)
-                    p.name = name
-                    p.save(
+                    obj = Category(id=slug_id)
+                    obj.name = name
+                    obj.save(
                         update_fields=[
                             'name',
                         ],
                     )
-                    print(p)
+                    print(obj)
 
                 else:
-                    p = Category()
-                    p.name = name
-                    p.slug = slug
-                    p.save()
-                    print(p)
+                    obj = Category()
+                    obj.name = name
+                    obj.slug = slug
+                    obj.save()
+                    print(obj)
 
             print(f'Import complete, imported {counter} products')
