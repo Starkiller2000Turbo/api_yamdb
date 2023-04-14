@@ -20,7 +20,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path(
-        '',
+        'api/v1/',
         include(
             'compositions.urls',
             namespace=apps.get_app_config('compositions').name,
