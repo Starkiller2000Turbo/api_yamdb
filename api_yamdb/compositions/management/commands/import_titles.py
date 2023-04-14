@@ -15,7 +15,7 @@ class Command(BaseCommand):
             'r',
             encoding='utf-8-sig',
         ) as csv_file, open(
-            f'{settings.DATA_IMPORT_LOCATION}/genre_titles.csv',
+            f'{settings.DATA_IMPORT_LOCATION}/genre_title.csv',
             'r',
             encoding='utf-8-sig',
         ) as genre_file:
