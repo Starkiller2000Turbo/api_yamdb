@@ -4,10 +4,10 @@ from django.shortcuts import get_object_or_404
 from .models Reviews, Comments, Title,
 
 from .permissions import (IsAuthorOrModeratorOrAdminOrReadOnly, )
-from .serializers import (ReviewsSerializer, CommentsSerializer, )
+from .serializers import (ReviewSerializer, CommentSerializer, )
 
 
-class ReviewsViewSet(viewsets.ModelViewSet):
+class ReviewViewSet(viewsets.ModelViewSet):
     """Вьюсет для отзывов."""
     serializer_class = ReviewsSerializer
     permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly, )
@@ -23,13 +23,13 @@ class ReviewsViewSet(viewsets.ModelViewSet):
     
 
 
-class CommentsViewSe(viewsets.ModelViewSet):
+class CommentViewSet(viewsets.ModelViewSet):
     """Вьюсет для комментариев."""
-    serializer_class = CommentsSerializer
+    serializer_class = CommentSerializer
     permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly, )
 
     def get_reviews(self):
-        return get_object_or_404(Reviews, id=self.kwargs.get('review_id'))
+        return get_object_or_404(Review, id=self.kwargs.get('review_id'))
 
     def get_queryset(self):
         return self.get_reviews().comments.all()

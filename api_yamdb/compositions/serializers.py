@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 
-from .models Comments, Reviews, Title,
+from .models Comment, Review, Title,
 
 
-class ReviewsSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     """Сериализатор для отзывов."""
     works = serializers.SlugRelatedField(
         slug_field='name', read_only=True)
@@ -27,10 +27,10 @@ class ReviewsSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ('id', 'text', 'author', 'score', 'pub_date')
-        model = Reviews
+        model = Review
 
 
-class CommentsSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     """"Сериализатор для комментариев на отзывы."""
     review = serializers.SlugRelatedField(
         slug_field='text', read_only=True)
@@ -40,4 +40,4 @@ class CommentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ('id', 'text', 'pub_date', 'author', 'review')
-        model = Comments
+        model = Comment

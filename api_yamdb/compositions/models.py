@@ -2,13 +2,13 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-class Reviews(models.Model):
+class Review(models.Model):
     """Отзыв на произведение + рейтинг"""
     works = models.ForeignKey(Title, on_delete=models.CASCADE,
-                              verbose_name='title', related_name='reviews')
+                              verbose_name='title', related_name='review')
     text = models.CharField(max_length=1000)
     autor = models.ForeignKey(User, on_delete=models.CASCADE,
-                              verbose_name='autor', related_name='reviews')
+                              verbose_name='autor', related_name='review')
     ratings = models.IntegerField(verbose_name='ratings',
                                   validators=(MinValueValidator(1),
                                               MaxValueValidator(10)))
@@ -20,11 +20,11 @@ class Reviews(models.Model):
         return self.text
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     """Коментарий на отзыв"""
     text = models.CharField(max_length=1000)
-    reviews = models.ForeignKey(Reviews, on_delete=models.CASCADE,
-                                verbose_name='comments',
+    reviews = models.ForeignKey(Review, on_delete=models.CASCADE,
+                                verbose_name='comment',
                                 related_name='reviews')
     autor = models.ForeignKey(User, on_delete=models.CASCADE,
                               verbose_name='autor', related_name='comments')
