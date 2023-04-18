@@ -15,7 +15,7 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
 
 
 class IsAuthorOrModeratorOrAdminOrReadOnly(
-    permissions.IsAuthenticatedOrReadOnly
+    permissions.IsAuthenticatedOrReadOnly,
 ):
     """Права доступа для отзывов и коментариев."""
 

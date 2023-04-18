@@ -1,20 +1,20 @@
 from django.core.exceptions import SuspiciousOperation
 from django.db import IntegrityError
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, viewsets
 
-from compositions.models import Category, Genre, Title, Review, Comment
+from compositions.models import Category, Genre, Review, Title
 from compositions.permissions import (
     IsAdminUserOrReadOnly,
     IsAuthorOrModeratorOrAdminOrReadOnly,
 )
 from compositions.serializers import (
     CategorySerializer,
-    GenreSerializer,
-    TitleSerializer,
-    ReviewSerializer,
     CommentSerializer,
+    GenreSerializer,
+    ReviewSerializer,
+    TitleSerializer,
 )
 
 

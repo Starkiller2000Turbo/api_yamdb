@@ -1,7 +1,8 @@
-from rest_framework import serializers
+from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
 
-from compositions.models import Category, Genre, Title, Comment, Review
+from compositions.models import Category, Comment, Genre, Review, Title
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -52,7 +53,8 @@ class ReviewSerializer(serializers.ModelSerializer):
     works = serializers.SlugRelatedField(slug_field='name', read_only=True)
 
     author = serializers.SlugRelatedField(
-        slug_field='username', read_only=True
+        slug_field='username',
+        read_only=True,
     )
 
     ratings = serializers.IntegerField(min_value=1, max_value=10)
@@ -64,7 +66,8 @@ class ReviewSerializer(serializers.ModelSerializer):
             title_id = self.context['view'].kwargs.get('title_id')
             title = get_object_or_404(Title, pk=title_id)
             if Review.objects.filter(
-                author=request.user, title=title
+                author=request.user,
+                title=title,
             ).exists():
                 raise ValidationError('Отзыв уже существует.')
         return data
@@ -80,7 +83,8 @@ class CommentSerializer(serializers.ModelSerializer):
     review = serializers.SlugRelatedField(slug_field='text', read_only=True)
 
     author = serializers.SlugRelatedField(
-        slug_field='username', read_only=True
+        slug_field='username',
+        read_only=True,
     )
 
     class Meta:

@@ -1,7 +1,9 @@
 import datetime
 
-from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
+
+from users.models import User
 
 
 class Category(models.Model):
@@ -98,7 +100,7 @@ class Comment(models.Model):
 
     text = models.CharField(max_length=1000)
     reviews = models.ForeignKey(
-        Reviews,
+        Review,
         on_delete=models.CASCADE,
         verbose_name='comments',
         related_name='reviews',
@@ -110,7 +112,8 @@ class Comment(models.Model):
         related_name='comments',
     )
     pub_date = models.DateField(
-        verbose_name='date_publication', auto_now_add=True
+        verbose_name='date_publication',
+        auto_now_add=True,
     )
 
     class Meta:

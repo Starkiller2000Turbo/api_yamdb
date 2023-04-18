@@ -4,11 +4,11 @@ from rest_framework.routers import SimpleRouter
 from compositions.views import (
     CategoryDetail,
     CategoryList,
+    CommentViewSet,
     GenreDetail,
     GenreList,
-    TitleViewSet,
     ReviewViewSet,
-    CommentViewSet,
+    TitleViewSet,
 )
 
 app_name = '%(app_label)s'
@@ -21,7 +21,9 @@ router.register(
     basename='comments',
 )
 router.register(
-    r'titles/(?P<title_id>\d+)/reviews', ReviewViewSet, basename='reviews'
+    r'titles/(?P<title_id>\d+)/reviews',
+    ReviewViewSet,
+    basename='reviews',
 )
 
 

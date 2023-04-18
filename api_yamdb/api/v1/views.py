@@ -7,8 +7,8 @@ from rest_framework import filters
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .permissions import IsAdmin
 from .serializers import SignUpSerializer, TokenSerializer, UserSerializer
