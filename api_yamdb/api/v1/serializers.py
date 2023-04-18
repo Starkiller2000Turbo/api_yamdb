@@ -6,10 +6,17 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     """Сериалайзер модели пользователя"""
+
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name',
-                  'last_name', 'bio', 'role')
+        fields = (
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'bio',
+            'role',
+        )
 
 
 class TokenSerializer(serializers.Serializer):
@@ -20,6 +27,7 @@ class TokenSerializer(serializers.Serializer):
 
 class SignUpSerializer(serializers.ModelSerializer):
     """Сериалайзер для создания нового пользователя"""
+
     class Meta:
         model = User
         fields = ('username', 'email')

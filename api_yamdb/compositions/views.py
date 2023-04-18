@@ -1,15 +1,20 @@
 from django.core.exceptions import SuspiciousOperation
 from django.db import IntegrityError
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, viewsets
 
-from compositions.models import Category, Genre, Title
-from compositions.permissions import IsAdminUserOrReadOnly
+from compositions.models import Category, Genre, Title, Review, Comment
+from compositions.permissions import (
+    IsAdminUserOrReadOnly,
+    IsAuthorOrModeratorOrAdminOrReadOnly,
+)
 from compositions.serializers import (
     CategorySerializer,
     GenreSerializer,
     TitleSerializer,
+    ReviewSerializer,
+    CommentSerializer,
 )
 
 
@@ -92,3 +97,35 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self) -> Category:
         slug = self.kwargs.get('slug')
         return get_object_or_404(Category, slug=slug)
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    """Вьюсет для отзывов."""
+
+    serializer_class = ReviewSerializer
+    permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly,)
+
+    def get_title(self):
+        return get_object_or_404(Title, id=self.kwargs.get('title_id'))
+
+    def get_queryset(self):
+        return self.get_title().reviews.all()
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user, title=self.get_title())
+
+
+class CommentViewSe(viewsets.ModelViewSet):
+    """Вьюсет для комментариев."""
+
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly,)
+
+    def get_reviews(self):
+        return get_object_or_404(Review, id=self.kwargs.get('review_id'))
+
+    def get_queryset(self):
+        return self.get_reviews().comments.all()
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user, review=self.get_review())

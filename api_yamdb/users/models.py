@@ -1,4 +1,5 @@
 from django.db import models
+<<<<<<< HEAD
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 
@@ -77,3 +78,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+=======
+
+# Create your models here.
+>>>>>>> feature/Rewiews_comments_Raitings

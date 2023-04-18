@@ -19,18 +19,30 @@ User = get_user_model()
 
 class UserViewSet(ModelViewSet):
     """Вьюсет для модели пользователя"""
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated, IsAdmin,)
-    http_method_names = ['get', 'post', 'patch', 'delete',]
+    permission_classes = (
+        IsAuthenticated,
+        IsAdmin,
+    )
+    http_method_names = [
+        'get',
+        'post',
+        'patch',
+        'delete',
+    ]
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
     lookup_field = 'username'
 
     @action(
         detail=False,
-        methods=('get', 'patch',),
-        permission_classes=(IsAuthenticated,)
+        methods=(
+            'get',
+            'patch',
+        ),
+        permission_classes=(IsAuthenticated,),
     )
     def me(self, request):
         """Функция для получения информации о своем пользователе"""
@@ -39,9 +51,7 @@ class UserViewSet(ModelViewSet):
             serializer = UserSerializer(user)
             return Response(serializer.data, status=HTTPStatus.OK)
         if request.method == 'PATCH':
-            serializer = UserSerializer(
-                user, data=request.data, partial=True
-            )
+            serializer = UserSerializer(user, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save(role=user.role)
             return Response(serializer.data, status=HTTPStatus.OK)
@@ -85,4 +95,5 @@ def get_token(request):
             {'access': str(token.access_token)}, status=HTTPStatus.OK
         )
     return Response(
-        'Неверный код подтверждения', status=HTTPStatus.BAD_REQUEST)
+        'Неверный код подтверждения', status=HTTPStatus.BAD_REQUEST
+    )
