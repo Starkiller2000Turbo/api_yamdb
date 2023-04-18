@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (ReviewViewSet, CommentViewSet,)
 
-app_name = 'compositions'
+app_name = 'reviews'
 
 router = DefaultRouter()
 
