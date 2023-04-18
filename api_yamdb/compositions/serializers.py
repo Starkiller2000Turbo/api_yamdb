@@ -5,11 +5,9 @@ from compositions.models import Category, Genre, Title
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = (
-            'name',
-            'slug',
-        )
         model = Genre
+        exclude = ('id',)
+        lookup_field = 'slug'
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
         }
@@ -17,11 +15,9 @@ class GenreSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        fields = (
-            'name',
-            'slug',
-        )
         model = Category
+        exclude = ('id',)
+        lookup_field = 'slug'
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
         }

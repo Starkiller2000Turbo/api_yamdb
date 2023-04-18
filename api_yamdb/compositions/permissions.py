@@ -12,5 +12,5 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
             request.user.is_authenticated and request.user.is_admin
         )
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request, view, obj) -> bool:
         return True
