@@ -49,7 +49,7 @@ class Title(models.Model):
             MaxValueValidator(limit_value=datetime.datetime.now().year),
         ],
     )
-    description = models.TextField(null=True)
+    description = models.TextField(null=True, blank=True)
     genre = models.ManyToManyField(
         Genre,
         through='GenreTitle',
@@ -78,12 +78,10 @@ class GenreTitle(models.Model):
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
-        related_name='title_to_genre',
     )
     genre = models.ForeignKey(
         Genre,
         on_delete=models.CASCADE,
-        related_name='genre_to_title',
     )
 
     def __str__(self) -> str:
@@ -92,4 +90,4 @@ class GenreTitle(models.Model):
         Returns:
             Поле name данного произведения
         """
-        return f'{self.title.name} is {self.genre.name}'
+        return f'{self.title.name}, жанр - {self.genre.name}'
