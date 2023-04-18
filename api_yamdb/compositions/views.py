@@ -1,5 +1,6 @@
 from django.core.exceptions import SuspiciousOperation
 from django.db import IntegrityError
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, viewsets
@@ -9,6 +10,7 @@ from compositions.permissions import IsAdminUserOrReadOnly
 from compositions.serializers import (
     CategorySerializer,
     GenreSerializer,
+    TitleReadSerializer,
     TitleSerializer,
 )
 
@@ -16,11 +18,25 @@ from compositions.serializers import (
 class TitleViewSet(viewsets.ModelViewSet):
     """Вьюсет, обрабатывающий запросы к произведениям."""
 
-    queryset = Title.objects.all()
+    queryset = (
+        Title.objects.all()
+        .annotate(
+            Avg('reviews__score'),
+        )
+        .order_by('name')
+    )
     serializer_class = TitleSerializer
     permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('genre__slug', 'name', 'year', 'category__slug')
+
+    def get_serializer_class(self):
+        if self.action in (
+            'retrieve',
+            'list',
+        ):
+            return TitleReadSerializer
+        return TitleSerializer
 
     def perform_create(self, serializer: TitleSerializer) -> None:
         """Автоматическое добавление пользователля.
