@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class CompositionsConfig(AppConfig):
     name = 'compositions'
-    verbose_name = 'произведения'
+    verbose_name = 'приложения'

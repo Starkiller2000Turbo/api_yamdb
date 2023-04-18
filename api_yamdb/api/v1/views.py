@@ -60,7 +60,7 @@ class UserViewSet(ModelViewSet):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def signup(request):
-    "Функция регистрации новых пользователей и получения кода подтверждения"
+    """Функция регистрации пользователей и получения кода подтверждения"""
     username = request.data.get('username')
     email = request.data.get('email')
     user = User.objects.filter(username=username, email=email)
@@ -92,8 +92,10 @@ def get_token(request):
     if default_token_generator.check_token(user, confirmation_code):
         token = RefreshToken.for_user(user)
         return Response(
-            {'access': str(token.access_token)}, status=HTTPStatus.OK
+            {'access': str(token.access_token)},
+            status=HTTPStatus.OK,
         )
     return Response(
-        'Неверный код подтверждения', status=HTTPStatus.BAD_REQUEST
+        'Неверный код подтверждения',
+        status=HTTPStatus.BAD_REQUEST,
     )

@@ -36,8 +36,17 @@ shell:
 import_categories:
 	$(MANAGE) import_categories
 
+import comments:
+	$(MANAGE) import_comments
+
+import_genre_title:
+	$(MANAGE) import_genre_title
+
 import_genres:
 	$(MANAGE) import_genres
+
+import reviews:
+	$(MANAGE) import_reviews
 
 import_titles:
 	$(MANAGE) import_titles
@@ -45,19 +54,14 @@ import_titles:
 import users:
 	$(MANAGE) import_users
 
-import comments:
-	$(MANAGE) import_comments
-
-import reviews:
-	$(MANAGE) import_reviews
-
 import:
+	$(MANAGE) import_users
 	$(MANAGE) import_categories
 	$(MANAGE) import_genres
 	$(MANAGE) import_titles
-	$(MANAGE) import_users
-	$(MANAGE) import_comments
+	$(MANAGE) import_genre_title
 	$(MANAGE) import_reviews
+	$(MANAGE) import_comments
 
 clear:
 	$(MANAGE) flush

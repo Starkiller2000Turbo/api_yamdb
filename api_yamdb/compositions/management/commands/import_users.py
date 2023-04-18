@@ -19,6 +19,7 @@ class Command(BaseCommand):
             next(csv_file)
 
             for counter, line in enumerate(csv_file):
+                id = line[0]
                 username = line[1]
                 email = line[2]
                 role = line[3]
@@ -47,6 +48,7 @@ class Command(BaseCommand):
 
                 else:
                     obj = User()
+                    obj.id = id
                     obj.username = username
                     obj.email = email
                     obj.role = role

@@ -20,7 +20,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TokenSerializer(serializers.Serializer):
-    "Сериалайзер для получения токена"
+    """Сериалайзер для получения токена"""
+
     username = serializers.CharField(required=True)
     confirmation_code = serializers.CharField(required=True)
 
@@ -35,6 +36,6 @@ class SignUpSerializer(serializers.ModelSerializer):
     def validate_username(self, username):
         if username == 'me':
             raise serializers.ValidationError(
-                'Нельзя зарегистрировать имя пользователя "me"'
+                'Нельзя зарегистрировать имя пользователя "me"',
             )
         return username

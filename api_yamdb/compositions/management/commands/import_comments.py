@@ -3,7 +3,7 @@ import csv
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from compositions.models import Comment, Review
+from reviews.models import Comment, Review
 from users.models import User
 
 
@@ -20,6 +20,7 @@ class Command(BaseCommand):
             next(csv_file)
 
             for counter, line in enumerate(csv_file):
+                id = line[0]
                 review = Review.objects.get(id=line[1])
                 text = line[2]
                 author = User.objects.get(id=line[3])
@@ -32,6 +33,7 @@ class Command(BaseCommand):
                     pub_date=pub_date,
                 ).exists():
                     obj = Comment()
+                    obj.id = id
                     obj.review = review
                     obj.text = text
                     obj.author = author

@@ -19,6 +19,7 @@ class Command(BaseCommand):
             next(csv_file)
 
             for counter, line in enumerate(csv_file):
+                id = line[0]
                 name = line[1]
                 slug = line[2]
 
@@ -35,6 +36,7 @@ class Command(BaseCommand):
 
                 else:
                     obj = Category()
+                    obj.id = id
                     obj.name = name
                     obj.slug = slug
                     obj.save()
