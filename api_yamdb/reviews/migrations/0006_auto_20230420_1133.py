@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('reviews', '0005_auto_20230418_2213'),
     ]
@@ -14,7 +13,14 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='review',
             name='score',
-            field=models.IntegerField(error_messages={'validators': 'Оценка от 1 до 10!'}, validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(10)], verbose_name='ratings'),
+            field=models.IntegerField(
+                error_messages={'validators': 'Оценка от 1 до 10!'},
+                validators=[
+                    django.core.validators.MinValueValidator(1),
+                    django.core.validators.MaxValueValidator(10),
+                ],
+                verbose_name='ratings',
+            ),
         ),
         migrations.AlterUniqueTogether(
             name='review',
@@ -22,6 +28,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='review',
-            constraint=models.UniqueConstraint(fields=('title', 'author'), name='unique_review'),
+            constraint=models.UniqueConstraint(
+                fields=('title', 'author'), name='unique_review'
+            ),
         ),
     ]

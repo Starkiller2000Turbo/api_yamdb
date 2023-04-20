@@ -6,7 +6,6 @@ from users.models import User
 
 
 class Review(models.Model):
-
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -23,7 +22,7 @@ class Review(models.Model):
     score = models.IntegerField(
         verbose_name='ratings',
         validators=(MinValueValidator(1), MaxValueValidator(10)),
-        error_messages={'validators': 'Оценка от 1 до 10!'}
+        error_messages={'validators': 'Оценка от 1 до 10!'},
     )
     pub_date = models.DateTimeField(
         verbose_name='date_publication',
@@ -34,9 +33,12 @@ class Review(models.Model):
         verbose_name = 'Reviews'
         constraints = [
             models.UniqueConstraint(
-                fields=('title', 'author',),
+                fields=(
+                    'title',
+                    'author',
+                ),
                 name='unique_review',
-            )
+            ),
         ]
         ordering = ['-pub_date']
 
@@ -45,7 +47,6 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-
     text = models.CharField(max_length=1000)
     review = models.ForeignKey(
         Review,
