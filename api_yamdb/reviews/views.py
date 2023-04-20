@@ -8,7 +8,6 @@ from reviews.serializers import CommentSerializer, ReviewSerializer
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    """Вьюсет для отзывов."""
 
     serializer_class = ReviewSerializer
     permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly,)
@@ -24,7 +23,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    """Вьюсет для комментариев."""
 
     serializer_class = CommentSerializer
     permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly,)
