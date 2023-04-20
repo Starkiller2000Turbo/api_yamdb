@@ -1,17 +1,18 @@
-import datetime
-
-from django.core.validators import MaxValueValidator
 from django.db import models
+
+from compositions.validators import validate_year
 
 
 class Category(models.Model):
     """Модель категории."""
 
-    name = models.CharField(max_length=256)
-    slug = models.SlugField(max_length=50, unique=True)
+    name = models.CharField(max_length=256, verbose_name='Название')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='Слаг')
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Группа'
+        verbose_name_plural = 'Группы'
 
     def __str__(self) -> str:
         """Задание текстового представления категории.
@@ -25,11 +26,13 @@ class Category(models.Model):
 class Genre(models.Model):
     """Модель жанра."""
 
-    name = models.CharField(max_length=256)
-    slug = models.SlugField(max_length=50, unique=True)
+    name = models.CharField(max_length=256, verbose_name='Название')
+    slug = models.SlugField(max_length=50, unique=True, verbose_name='Слаг')
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Жанр'
+        verbose_name_plural = 'Жанры'
 
     def __str__(self) -> str:
         """Задание текстового представления жанра.
@@ -43,26 +46,33 @@ class Genre(models.Model):
 class Title(models.Model):
     """Модель произведения."""
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, verbose_name='Название')
     year = models.IntegerField(
-        validators=[
-            MaxValueValidator(limit_value=datetime.datetime.now().year),
-        ],
+        validators=[validate_year],
+        verbose_name='Год создания',
     )
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name='Описание',
+    )
     genre = models.ManyToManyField(
         Genre,
         through='GenreTitle',
+        verbose_name='Жанр',
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
         null=True,
+        verbose_name='Категория',
     )
 
     class Meta:
         ordering = ['id']
         default_related_name = 'titles'
+        verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
 
     def __str__(self) -> str:
         """Задание текстового представления произведения.
@@ -79,11 +89,17 @@ class GenreTitle(models.Model):
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
+        verbose_name='Произведение',
     )
     genre = models.ForeignKey(
         Genre,
         on_delete=models.CASCADE,
+        verbose_name='Жанр',
     )
+
+    class Meta:
+        verbose_name = 'Жанр произведения'
+        verbose_name_plural = 'Жанры произведения'
 
     def __str__(self) -> str:
         """Задание текстового представления произведения.

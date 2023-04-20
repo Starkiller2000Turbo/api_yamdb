@@ -23,7 +23,7 @@ class TitleAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-class Genre_TitleInline(admin.TabularInline):
+class GenreTitleInline(admin.TabularInline):
     model = Title.genre.through
 
 

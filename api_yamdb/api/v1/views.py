@@ -2,17 +2,30 @@ from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-from rest_framework import filters
+from django_filters import rest_framework
+from rest_framework import filters, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .permissions import IsAdmin
-from .serializers import SignUpSerializer, TokenSerializer, UserSerializer
-from .utils import send_confirmation_code
+from api.v1.filters import TitlesFilter
+from api.v1.mixins import ListCreateDestroyViewSet
+from api.v1.permissions import IsAdmin, IsAdminUserOrReadOnly
+from api.v1.serializers import (
+    CategorySerializer,
+    GenreSerializer,
+    SignUpSerializer,
+    TitleReadSerializer,
+    TitleSerializer,
+    TokenSerializer,
+    UserSerializer,
+)
+from api.v1.utils import send_confirmation_code
+from compositions.models import Category, Genre, Title
 
 User = get_user_model()
 
@@ -99,3 +112,45 @@ def get_token(request):
         'Неверный код подтверждения',
         status=HTTPStatus.BAD_REQUEST,
     )
+
+
+class TitleViewSet(viewsets.ModelViewSet):
+    """Вьюсет, обрабатывающий запросы к произведениям."""
+
+    queryset = (
+        Title.objects.all()
+        .annotate(
+            Avg('reviews__score'),
+        )
+        .order_by('name')
+    )
+    serializer_class = TitleSerializer
+    permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = (rest_framework.DjangoFilterBackend,)
+    filterset_class = TitlesFilter
+
+    def get_serializer_class(self):
+        if self.action in (
+            'retrieve',
+            'list',
+        ):
+            return TitleReadSerializer
+        return TitleSerializer
+
+
+class GenreViewSet(ListCreateDestroyViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+
+class CategoryViewSet(ListCreateDestroyViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
