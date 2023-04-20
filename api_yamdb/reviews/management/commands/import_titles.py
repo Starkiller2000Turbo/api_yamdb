@@ -3,7 +3,7 @@ import csv
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from compositions.models import Genre, GenreTitle, Title
+from reviews.models import Category, Title
 
 
 class Command(BaseCommand):
@@ -11,7 +11,7 @@ class Command(BaseCommand):
         print('Importing data from:', settings.DATA_IMPORT_LOCATION)
 
         with open(
-            f'{settings.DATA_IMPORT_LOCATION}/genre_title.csv',
+            f'{settings.DATA_IMPORT_LOCATION}/titles.csv',
             'r',
             encoding='utf-8-sig',
         ) as csv_file:
@@ -20,17 +20,20 @@ class Command(BaseCommand):
 
             for counter, line in enumerate(csv_file):
                 id = line[0]
-                title = Title.objects.get(id=line[1])
-                genre = Genre.objects.get(id=line[2])
+                name = line[1]
+                year = line[2]
+                category = Category.objects.get(id=line[3])
 
-                if not GenreTitle.objects.filter(
-                    title=title,
-                    genre=genre,
+                if not Title.objects.filter(
+                    name=name,
+                    year=year,
+                    category=category,
                 ).exists():
-                    obj = GenreTitle()
+                    obj = Title()
                     obj.id = id
-                    obj.title = title
-                    obj.genre = genre
+                    obj.name = name
+                    obj.year = year
+                    obj.category = category
                     obj.save()
                     print(obj)
 

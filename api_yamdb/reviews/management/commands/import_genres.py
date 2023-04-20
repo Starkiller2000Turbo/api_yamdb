@@ -3,7 +3,7 @@ import csv
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from compositions.models import Genre
+from reviews.models import Genre
 
 
 class Command(BaseCommand):

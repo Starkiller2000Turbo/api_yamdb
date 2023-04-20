@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'djoser',
     'django_filters',
     'api.apps.ApiConfig',
-    'compositions.apps.CompositionsConfig',
     'reviews.apps.ReviewsConfig',
     'users.apps.UsersConfig',
 ]

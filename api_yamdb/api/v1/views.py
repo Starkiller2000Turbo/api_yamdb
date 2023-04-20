@@ -14,10 +14,16 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.v1.filters import TitlesFilter
 from api.v1.mixins import ListCreateDestroyViewSet
-from api.v1.permissions import IsAdmin, IsAdminUserOrReadOnly
+from api.v1.permissions import (
+    IsAdmin,
+    IsAdminUserOrReadOnly,
+    IsAuthorOrModeratorOrAdminOrReadOnly,
+)
 from api.v1.serializers import (
     CategorySerializer,
+    CommentSerializer,
     GenreSerializer,
+    ReviewSerializer,
     SignUpSerializer,
     TitleReadSerializer,
     TitleSerializer,
@@ -25,7 +31,7 @@ from api.v1.serializers import (
     UserSerializer,
 )
 from api.v1.utils import send_confirmation_code
-from compositions.models import Category, Genre, Title
+from reviews.models import Category, Genre, Review, Title
 
 User = get_user_model()
 
@@ -154,3 +160,31 @@ class CategoryViewSet(ListCreateDestroyViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    serializer_class = ReviewSerializer
+    permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly,)
+
+    def get_title(self):
+        return get_object_or_404(Title, id=self.kwargs.get('title_id'))
+
+    def get_queryset(self):
+        return self.get_title().reviews.all()
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user, title=self.get_title())
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthorOrModeratorOrAdminOrReadOnly,)
+
+    def get_review(self):
+        return get_object_or_404(Review, id=self.kwargs.get('review_id'))
+
+    def get_queryset(self):
+        return self.get_review().comments.all()
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user, review=self.get_review())
