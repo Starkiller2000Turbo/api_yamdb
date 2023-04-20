@@ -4,7 +4,6 @@ from rest_framework import permissions
 class IsAuthorOrModeratorOrAdminOrReadOnly(
     permissions.IsAuthenticatedOrReadOnly,
 ):
-    """Права доступа для отзывов и коментариев."""
 
     def has_object_permission(self, request, view, obj):
         return (
