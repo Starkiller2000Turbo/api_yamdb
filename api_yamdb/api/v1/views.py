@@ -82,20 +82,16 @@ def signup(request):
     username = request.data.get('username')
     email = request.data.get('email')
     user = User.objects.filter(username=username, email=email)
-    if user.exists():
-        user = User.objects.get(username=username, email=email)
-        code = default_token_generator.make_token(user)
-        send_confirmation_code(user, code)
-        return Response(request.data, status=HTTPStatus.OK)
-    serializer = SignUpSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    email = serializer.validated_data.get('email')
-    username = serializer.validated_data.get('username')
-    serializer.save()
+    if not user.exists():
+        serializer = SignUpSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data.get('email')
+        username = serializer.validated_data.get('username')
+        serializer.save()
     user = User.objects.get(email=email, username=username)
     code = default_token_generator.make_token(user)
     send_confirmation_code(user, code)
-    return Response(serializer.data, status=HTTPStatus.OK)
+    return Response(request.data, status=HTTPStatus.OK)
 
 
 @api_view(['POST'])
