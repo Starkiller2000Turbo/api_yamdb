@@ -79,9 +79,9 @@ class UserViewSet(ModelViewSet):
 @permission_classes([AllowAny])
 def signup(request):
     """Функция регистрации пользователей и получения кода подтверждения"""
-    serializer = SignUpSerializer(data=request.data)
+    username = request.data.get('username')
     email = request.data.get('email')
-    user = User.objects.filter(email=email)
+    user = User.objects.filter(username=username, email=email)
     if not user.exists():
         serializer = SignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
