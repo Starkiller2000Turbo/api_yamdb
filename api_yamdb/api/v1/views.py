@@ -29,6 +29,7 @@ from api.v1.serializers import (
     TitleSerializer,
     TokenSerializer,
     UserSerializer,
+    RegisterDataSerializer,
 )
 from api.v1.utils import send_confirmation_code
 from reviews.models import Category, Genre, Review, Title
@@ -69,22 +70,19 @@ class UserViewSet(ModelViewSet):
         if request.method == 'GET':
             serializer = UserSerializer(user)
             return Response(serializer.data, status=HTTPStatus.OK)
-        if request.method == 'PATCH':
-            serializer = UserSerializer(user, data=request.data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(role=user.role)
-            return Response(serializer.data, status=HTTPStatus.OK)
 
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def signup(request):
     """Функция регистрации пользователей и получения кода подтверждения"""
-    username = request.data.get('username')
+    serializer = RegisterDataSerializer(data=request.data)
     email = request.data.get('email')
-    user = User.objects.filter(username=username, email=email)
+    user = get_object_or_404(
+        User,
+        username=serializer.validated_data["username"]
+    )
     if user.exists():
-        user = User.objects.get(username=username, email=email)
         code = default_token_generator.make_token(user)
         send_confirmation_code(user, code)
         return Response(request.data, status=HTTPStatus.OK)

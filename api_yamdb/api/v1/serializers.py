@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from reviews.models import Category, Comment, Genre, Review, Title
 
@@ -10,6 +11,18 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     """Сериалайзер модели пользователя"""
+
+    username = serializers.CharField(
+        validators=[
+            UniqueValidator(queryset=User.objects.all())
+        ],
+        required=True,
+    )
+    email = serializers.EmailField(
+        validators=[
+            UniqueValidator(queryset=User.objects.all())
+        ]
+    )
 
     class Meta:
         model = User
@@ -38,7 +51,7 @@ class SignUpSerializer(serializers.ModelSerializer):
         fields = ('username', 'email')
 
     def validate_username(self, username):
-        if username == 'me':
+        if username.get('username') == 'me':
             raise serializers.ValidationError(
                 'Нельзя зарегистрировать имя пользователя "me"',
             )
