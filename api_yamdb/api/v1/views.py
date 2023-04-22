@@ -29,7 +29,6 @@ from api.v1.serializers import (
     TitleSerializer,
     TokenSerializer,
     UserSerializer,
-    RegisterDataSerializer,
 )
 from api.v1.utils import send_confirmation_code
 from reviews.models import Category, Genre, Review, Title
@@ -80,7 +79,7 @@ def signup(request):
     email = request.data.get('email')
     user = get_object_or_404(
         User,
-        username=serializer.validated_data["username"]
+        username=serializer.validated_data['username'],
     )
     if user.exists():
         code = default_token_generator.make_token(user)

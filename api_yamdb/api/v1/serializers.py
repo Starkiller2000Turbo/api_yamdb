@@ -14,14 +14,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(
         validators=[
-            UniqueValidator(queryset=User.objects.all())
+            UniqueValidator(queryset=User.objects.all()),
         ],
         required=True,
     )
     email = serializers.EmailField(
         validators=[
-            UniqueValidator(queryset=User.objects.all())
-        ]
+            UniqueValidator(queryset=User.objects.all()),
+        ],
     )
 
     class Meta:
