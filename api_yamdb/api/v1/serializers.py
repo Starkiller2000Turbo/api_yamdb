@@ -50,13 +50,13 @@ class SignUpSerializer(serializers.Serializer):
     def validate(self, data):
         username = data.get('username')
         email = data.get('email')
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).first():
             user = User.objects.get(username=username)
             if user.email != email:
                 raise serializers.ValidationError(
                     'Пользователь с таким именем уже зарегистрирован',
                 )
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).first():
             user = User.objects.get(email=email)
             if user.username != username:
                 raise serializers.ValidationError(
@@ -67,7 +67,7 @@ class SignUpSerializer(serializers.Serializer):
     def create(self, validated_data):
         username = validated_data['username']
         email = validated_data['email']
-        if not User.objects.filter(username=username, email=email).exists():
+        if not User.objects.get_or_create(username=username, email=email):
             User.objects.create(**validated_data)
         user = User.objects.get(username=username, email=email)
         return user
