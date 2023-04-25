@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
-from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
@@ -39,7 +38,7 @@ class SignUpSerializer(serializers.Serializer):
         max_length=150,
         validators=[RegexValidator(r'^[\w.@+-]+\Z')],
     )
-    email = serializers.CharField(max_length=254, required=True)
+    email = serializers.EmailField(max_length=254, required=True)
 
     def validate_username(self, username):
         if username.lower() == 'me':
@@ -49,16 +48,20 @@ class SignUpSerializer(serializers.Serializer):
         return username
 
     def validate(self, data):
-        username = data['username']
-        email = data['email']
+        username = data.get('username')
+        email = data.get('email')
         if User.objects.filter(username=username).exists():
             user = User.objects.get(username=username)
             if user.email != email:
-                raise serializers.ValidationError()
+                raise serializers.ValidationError(
+                    'Пользователь с таким именем уже зарегистрирован',
+                )
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
             if user.username != username:
-                raise serializers.ValidationError()
+                raise serializers.ValidationError(
+                    'Пользователь с такой почтой уже зарегистрирован',
+                )
         return data
 
     def create(self, validated_data):
@@ -150,7 +153,7 @@ class ReviewSerializer(serializers.ModelSerializer):
                 author=request.user,
                 title=title,
             ).exists():
-                raise ValidationError('Отзыв уже существует.')
+                raise serializers.ValidationError('Отзыв уже существует.')
         return data
 
     class Meta:

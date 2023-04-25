@@ -81,6 +81,7 @@ def signup(request):
     """Функция регистрации пользователей и получения кода подтверждения"""
     serializer = SignUpSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
+    print(serializer.errors)
     email = serializer.validated_data.get('email')
     username = serializer.validated_data.get('username')
     serializer.save()
