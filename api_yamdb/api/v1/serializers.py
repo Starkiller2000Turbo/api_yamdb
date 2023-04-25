@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import RegexValidator
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -30,12 +31,15 @@ class TokenSerializer(serializers.Serializer):
     confirmation_code = serializers.CharField(required=True)
 
 
-class SignUpSerializer(serializers.ModelSerializer):
+class SignUpSerializer(serializers.Serializer):
     """Сериалайзер для создания нового пользователя"""
 
-    class Meta:
-        model = User
-        fields = ('username', 'email')
+    username = serializers.CharField(
+        required=True,
+        max_length=150,
+        validators=[RegexValidator(r'^[\w.@+-]+\Z')],
+    )
+    email = serializers.CharField(max_length=254, required=True)
 
     def validate_username(self, username):
         if username.lower() == 'me':
@@ -43,6 +47,27 @@ class SignUpSerializer(serializers.ModelSerializer):
                 'Нельзя зарегистрировать имя пользователя "me"',
             )
         return username
+
+    def validate(self, data):
+        username = data['username']
+        email = data['email']
+        if User.objects.filter(username=username).exists():
+            user = User.objects.get(username=username)
+            if user.email != email:
+                raise serializers.ValidationError()
+        if User.objects.filter(email=email).exists():
+            user = User.objects.get(email=email)
+            if user.username != username:
+                raise serializers.ValidationError()
+        return data
+
+    def create(self, validated_data):
+        username = validated_data['username']
+        email = validated_data['email']
+        if not User.objects.filter(username=username, email=email).exists():
+            User.objects.create(**validated_data)
+        user = User.objects.get(username=username, email=email)
+        return user
 
 
 class GenreSerializer(serializers.ModelSerializer):
