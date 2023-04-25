@@ -87,7 +87,7 @@ def signup(request):
     user = User.objects.get(email=email, username=username)
     code = default_token_generator.make_token(user)
     send_confirmation_code(user, code)
-    return Response(request.data, status=HTTPStatus.OK)
+    return Response(serializer.data, status=HTTPStatus.OK)
 
 
 @api_view(['POST'])
